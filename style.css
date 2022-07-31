@@ -1,0 +1,48 @@
+*{
+    font-family: 'Permanent Marker', cursive;
+}
+
+.movement-key {
+    position:absolute;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.pressed {
+    background: white;
+    color: black;
+}
+
+.key-w, .key-a, .key-d, .key-s {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+
+.key-w {
+    bottom: 180px;
+    left: 300px;
+}
+
+.key-a, .key-s, .key-d, .key-shift {
+    bottom: 100px;
+}
+
+.key-a {
+    left: 200px;
+}
+.key-s {
+    left: 300px;
+}
+
+.key-d {
+    left: 400px;
+}
+
+.key-shift {
+    left: 75px;
+}
+
+
