@@ -1,82 +1,92 @@
-const getAngleYCamerDirection = (cameraPosition, avatarPosition) => {
-  return Math.atan2((cameraPosition.x - avatarPosition.x),(cameraPosition.z - avatarPosition.z));
-}
+import { CharacterController } from "./CharacterController";
+import { KeyDisplay } from "./keydisplay";
 
-const getDirectionOffset = (keysPressed) => {
-  let directionOffset = 0 // w
 
-  if (keysPressed['w']) {
-      if (keysPressed['d']) {
-          directionOffset = Math.PI / 4 + Math.PI / 2 // s+a
-      } else if (keysPressed['a']) {
-          directionOffset = -Math.PI / 4 - Math.PI / 2 // s+d
-      } else {
-          directionOffset = Math.PI // s
+//key display component
+AFRAME.registerComponent('key-display', {
+  schema: {
+  },
+
+  init: function () {
+    const keyMap = new Map();
+    //instantiate display keys
+    KeyDisplay.directions.forEach(keyText => keyMap.set(keyText, new KeyDisplay(keyText)));
+    keyMap.set(KeyDisplay.shift, new KeyDisplay(KeyDisplay.shift));
+
+    //add keyup and keydown handlers
+    document.addEventListener('keydown', event => {
+      const keyPressed = keyMap.get(event.key.toLowerCase());
+      if(keyPressed){
+        keyPressed.down();
       }
-  } else if (keysPressed['s']) {
-      if (keysPressed['d']) {
-          directionOffset = Math.PI / 4 // w+a
-      } else if (keysPressed['a']) {
-          directionOffset = - Math.PI / 4 // w+d
+    });
+    document.addEventListener('keyup', event => {
+      const keyLeft = keyMap.get(event.key.toLowerCase());
+      if(keyLeft){
+        keyLeft.up();
       }
-     
-  } else if (keysPressed['d']) {
-      directionOffset = Math.PI / 2 // a
-  } else if (keysPressed['a']) {
-      directionOffset = - Math.PI / 2 // d
+    });
+  },
+
+  update: function () {
+    // Do something when component's data is updated.
+  },
+
+  remove: function () {
+    // Do something the component or its entity is detached.
+  },
+
+  tick: function (time, timeDelta) {
+    // Do something on every scene tick or frame.
   }
-
-  return directionOffset
-}
-
-let rotateAngle = new THREE.Vector3(0, 1, 0);
-let rotateQuarternion = new THREE.Quaternion();
-
-
-
-
-
-
-//initialize avatar with a idle pose
-const avatar = document.getElementById("character");
-avatar.setAttribute('animation-mixer', {clip: 'Idle'});
-
-//reference the camera
-const camera = document.getElementById('camera');
-
-//maintain keys pressed at a given time
-const keysPressed = {};
-
-//Event Listener for key pressed
-document.addEventListener('keydown', event => {
-  keysPressed[event.key] = true;
-  //set animation
-  if(event.key === 'w'|| event.key === 'a' || event.key === 's' || event.key === 'd' ){
-
-       // calculate angle towards camera direction
-      const angleYCameraDirection = getAngleYCamerDirection(camera.getObject3D('camera').position, avatar.object3D.position);
-      // direction offset
-      const directionOffset = getDirectionOffset(keysPressed);
-      rotateQuarternion.setFromAxisAngle(rotateAngle, angleYCameraDirection + directionOffset);
-      avatar.object3D.quaternion.rotateTowards(rotateQuarternion, 0.2);
-
-      avatar.setAttribute('animation-mixer', {clip: 'Walking', crossFadeDuration: '0.2'});
-  }
-  
 });
 
-//Event Listener for key not pressed
-document.addEventListener('keyup', event => {
-  keysPressed[event.key] = false;
-  //set animation
-  avatar.setAttribute('animation-mixer', {clip: 'Idle'})
-})
+
+//movement controller component
+AFRAME.registerComponent('movement-controller', {
+  schema: {
+    
+  },
+
+  init: function () {
+    // Do something when component first attached.
+    const camera = document.querySelector('a-entity#camera').object3D;
+    this.el.addEventListener('model-loaded', e => {
+      //set model property
+      this.model = e.detail.model;
+      //setup animation map
+      const animations = this.model.animations;
+      const mixer = new THREE.AnimationMixer(this.model);
+      const animationMap = new Map();
+      animations.filter(a => a.name != 'TPose').forEach((a) => animationMap.set(a.name, mixer.clipAction(a)));
+      //instantiate character controller
+      this.characterController = new CharacterController(this.model, mixer, animationMap, camera, 'Idle');
+    })
+    this.keysPressed = {}
+    document.addEventListener('keydown', event => {
+      this.keysPressed[event.key.toLowerCase()] = true;
+      
+      
+
+    }, false);
+
+    document.addEventListener('keyup', event => {
+      this.keysPressed[event.key.toLowerCase()] = false;
+    }, false);
+  },
+
+  update: function () {
+    // Do something when component's data is updated.
+  },
+
+  remove: function () {
+    // Do something the component or its entity is detached.
+  },
+
+  tick: function (time, timeDelta) {
+    // Do something on every scene tick or frame.
+    this.characterController && this.characterController.update(timeDelta/1000, this.keysPressed)
+  }
+});
 
 
-
-
-
-
-
-
-//character controller class
