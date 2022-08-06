@@ -14,16 +14,12 @@
 <body>
     <a-scene renderer="colorManagement: true;" vr-mode-ui="enabled: false">
         <a-assets>
-            <a-asset-item id="avatar-model" src="https://metaverse-poc-model-store.s3.ap-south-1.amazonaws.com/avatar.glb"></a-asset-item>
+            <a-asset-item id="avatar-model" src="./avatar.glb"></a-asset-item>
         </a-assets>
-        <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" position="0 2 10" look-controls>
-            <a-entity cursor="fuse: true; fuseTimeout: 500"
-                position="0 0 -1"
-                geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
-                material="color: black; shader: flat">
-            </a-entity>
+        <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" orbit-controls="target:0 1 0; minDistance: 5; maxDistance: 15; enablePan: false; initialPosition: 0 5 5">
         </a-entity>
         <a-entity shadow key-display movement-controller id="character" gltf-model="#avatar-model" rotation="0 180 0"></a-entity>
+        <a-box color="blue" height="1" width="1" depth="1" position="10 0 0"></a-box>
         <a-plane shadow="receive: true" position="0 0 -4" rotation="-90 0 0" width="40" height="40" color="#7BC8A4"></a-plane>
         <a-sky color="#80d6ff"></a-sky>
         <a-entity light="type: ambient; color: #FFF; intensity:0.7"></a-entity>

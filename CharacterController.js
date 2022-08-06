@@ -3,6 +3,7 @@ import { KeyDisplay } from "./keydisplay";
 export class CharacterController {
     model;
     mixer;
+    orbitControl;
     animationMap;
     camera;
 
@@ -22,11 +23,12 @@ export class CharacterController {
     runVelocity = 5;
     walkVelocity = 2;
 
-    constructor(model, mixer, animationMap, camera, currentAction){
+    constructor(model, mixer, animationMap, camera, orbitControl, currentAction){
         this.model = model;
         this.mixer = mixer;
         this.animationMap = animationMap;
         this.camera = camera;
+        this.orbitControl = orbitControl;
         this.currentAction = currentAction;
 
         this.animationMap.forEach((value, key) => {
@@ -62,14 +64,20 @@ export class CharacterController {
         this.mixer.update(delta);
 
         if(this.currentAction == 'Running' || this.currentAction == 'Walking') {
-            
+            //get the standard wasd based angle offset
             var directionOffset = this.#directionOffset(keysPressed);
 
-            // rotate models
-            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, directionOffset);
+            //get the current angle between model and camera
+            const angleBetweenModelAndCamera = Math.atan2(
+                (this.camera.position.x + this.model.position.x), 
+                (this.camera.position.z + this.model.position.z))
+
+
+            // rotate model to face where the camera is looking at and also apply the wasd based angle
+            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, directionOffset + angleBetweenModelAndCamera);
             this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2);
 
-            // calculate direction
+            // calculate direction vector for choosing which way to translate
             this.camera.getWorldDirection(this.walkDirection);
             this.walkDirection.y = 0;
             this.walkDirection.normalize();
@@ -80,11 +88,12 @@ export class CharacterController {
             // move model & camera
             const moveX = this.walkDirection.x * velocity * delta;
             const moveZ = this.walkDirection.z * velocity * delta;
-            this.model.position.x += moveX;
-            this.model.position.z += moveZ;
+            this.model.position.x -= moveX;
+            this.model.position.z -= moveZ;
 
-            this.camera.position.z -= moveZ;
-            this.camera.position.x -= moveX;
+            this.camera.position.z += moveZ;
+            this.camera.position.x += moveX;
+            this.orbitControl.target.set(-this.model.position.x, this.model.position.y + 1, -this.model.position.z);
         }
     }
 
