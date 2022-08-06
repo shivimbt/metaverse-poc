@@ -50,8 +50,6 @@ AFRAME.registerComponent('movement-controller', {
   init: function () {
     // Do something when component first attached.
     const camera = document.querySelector('a-entity#camera').getObject3D('camera');
-    const orbitControl = document.querySelector('[orbit-controls]').components['orbit-controls'];
-    console.log(camera);
     this.el.addEventListener('model-loaded', e => {
       //set model property
       this.model = e.detail.model;
@@ -61,7 +59,7 @@ AFRAME.registerComponent('movement-controller', {
       const animationMap = new Map();
       animations.filter(a => a.name != 'TPose').forEach((a) => animationMap.set(a.name, mixer.clipAction(a)));
       //instantiate character controller
-      this.characterController = new CharacterController(this.model, mixer, animationMap, camera, orbitControl, 'Idle');
+      this.characterController = new CharacterController(this.model, mixer, animationMap, camera, 'Idle');
     })
     this.keysPressed = {}
     document.addEventListener('keydown', event => {

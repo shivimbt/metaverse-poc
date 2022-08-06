@@ -16,7 +16,7 @@
         <a-assets>
             <a-asset-item id="avatar-model" src="./avatar.glb"></a-asset-item>
         </a-assets>
-        <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" orbit-controls="minDistance: 5; maxDistance: 15; enablePan: false; initialPosition: 0 5 5;">
+        <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" position="0 2 10">
         </a-entity>
         <a-entity shadow key-display movement-controller id="character" gltf-model="#avatar-model" rotation="0 180 0"></a-entity>
         <a-plane shadow="receive: true" position="0 0 -4" rotation="-90 0 0" width="40" height="40" color="#7BC8A4"></a-plane>

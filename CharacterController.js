@@ -4,7 +4,6 @@ export class CharacterController {
     model;
     mixer;
     animationMap;
-    orbitControl;
     camera;
 
     //state
@@ -21,12 +20,11 @@ export class CharacterController {
     runVelocity = 5
     walkVelocity = 2
 
-    constructor(model, mixer, animationMap, camera, orbitControl, currentAction){
+    constructor(model, mixer, animationMap, camera, currentAction){
         this.model = model;
         this.mixer = mixer;
         this.animationMap = animationMap;
         this.camera = camera;
-        this.orbitControl = orbitControl;
         this.currentAction = currentAction;
 
         this.animationMap.forEach((value, key) => {
@@ -34,7 +32,6 @@ export class CharacterController {
                 value.play()
             }
         })
-        this.#updateCameraTarget(0,0);
     }
 
     update(delta, keysPressed) {
@@ -61,15 +58,11 @@ export class CharacterController {
         this.mixer.update(delta);
 
         if(this.currentAction == 'Walking') {
-            // calculate towards camera direction
-            var angleYCameraDirection = Math.atan2(
-                (this.camera.position.x - this.model.position.x), 
-                (this.camera.position.z - this.model.position.z));
-            // diagonal movement angle offset
+            
             var directionOffset = this.#directionOffset(keysPressed);
 
             // rotate models
-            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
+            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, directionOffset)
             this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2);
 
             // calculate direction
@@ -77,30 +70,19 @@ export class CharacterController {
             this.walkDirection.y = 0
             this.walkDirection.normalize()
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
-            console.log(this.walkDirection);
+            // console.log(this.walkDirection);
 
             // run/walk velocity
             const velocity = this.currentAction == 'Running' ? this.runVelocity : this.walkVelocity
-
             // move model & camera
             const moveX = this.walkDirection.x * velocity * delta
             const moveZ = this.walkDirection.z * velocity * delta
-            // this.model.position.x += moveX
-            // this.model.position.z += moveZ
-            this.#updateCameraTarget(moveX, moveZ);
+            this.model.position.x -= moveX
+            this.model.position.z -= moveZ
+
+            this.camera.position.z += moveZ
+            this.camera.position.x += moveX
         }
-    }
-
-    #updateCameraTarget(moveX, moveZ) {
-        //move camera
-        this.camera.position.x += moveX
-        this.camera.position.z += moveZ
-
-        // update camera target
-        this.cameraTarget.x = this.model.position.x
-        this.cameraTarget.y = this.model.position.y+1
-        this.cameraTarget.z = this.model.position.z
-        this.orbitControl.target = this.cameraTarget
     }
 
 
