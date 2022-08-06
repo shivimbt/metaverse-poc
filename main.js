@@ -11,6 +11,7 @@ AFRAME.registerComponent('key-display', {
     const keyMap = new Map();
     //instantiate display keys
     KeyDisplay.directions.forEach(keyText => keyMap.set(keyText, new KeyDisplay(keyText)));
+    keyMap.set(KeyDisplay.shift, new KeyDisplay(KeyDisplay.shift));
 
     //add keyup and keydown handlers
     document.addEventListener('keydown', event => {
@@ -64,6 +65,8 @@ AFRAME.registerComponent('movement-controller', {
     this.keysPressed = {}
     document.addEventListener('keydown', event => {
       this.keysPressed[event.key.toLowerCase()] = true;
+      
+      
 
     }, false);
 

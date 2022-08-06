@@ -2,6 +2,7 @@
 
 export class KeyDisplay {
     static directions = ['w','a','s','d'];
+    static shift = 'shift';
     constructor(text){
         this.text = text;
         this.key = this.#createKey();
