@@ -50,7 +50,7 @@ AFRAME.registerComponent('movement-controller', {
 
   init: function () {
     // Do something when component first attached.
-    const camera = document.querySelector('a-entity#camera').getObject3D('camera');
+    const camera = document.querySelector('a-entity#camera').object3D;
     this.el.addEventListener('model-loaded', e => {
       //set model property
       this.model = e.detail.model;
