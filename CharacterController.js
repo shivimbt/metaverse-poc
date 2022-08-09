@@ -2,6 +2,7 @@ import { KeyDisplay } from "./keydisplay";
 
 export class CharacterController {
     model;
+    boundingBox;
     mixer;
     orbitControl;
     animationMap;
@@ -23,8 +24,9 @@ export class CharacterController {
     runVelocity = 5;
     walkVelocity = 2;
 
-    constructor(model, mixer, animationMap, camera, orbitControl, currentAction){
+    constructor(model, boundingBox, mixer, animationMap, camera, orbitControl, currentAction){
         this.model = model;
+        this.boundingBox = boundingBox;
         this.mixer = mixer;
         this.animationMap = animationMap;
         this.camera = camera;
@@ -69,8 +71,8 @@ export class CharacterController {
 
             //get the current angle between model and camera
             const angleBetweenModelAndCamera = Math.atan2(
-                (this.camera.position.x + this.model.position.x), 
-                (this.camera.position.z + this.model.position.z))
+                (this.camera.position.x - this.boundingBox.object3D.position.x), 
+                (this.camera.position.z - this.boundingBox.object3D.position.z))
 
 
             // rotate model to face where the camera is looking at and also apply the wasd based angle
@@ -86,15 +88,24 @@ export class CharacterController {
             // run/walk velocity
             const velocity = this.currentAction == 'Running' ? this.runVelocity : this.walkVelocity;
             // move model & camera
-            const moveX = this.walkDirection.x * velocity * delta;
-            const moveZ = this.walkDirection.z * velocity * delta;
-            this.model.position.x -= moveX;
-            this.model.position.z -= moveZ;
+            const velocityX = this.walkDirection.x * velocity;
+            const velocityY = this.walkDirection.z * velocity; 
+            const moveX = velocityX * delta;
+            const moveZ = velocityY * delta;
+
+            //model movement
+            const velocityForPhysicsBody = new Ammo.btVector3(velocityX, 0, velocityY);
+            this.boundingBox.body.setLinearVelocity(velocityForPhysicsBody);
+            Ammo.destroy(velocityForPhysicsBody);
 
             this.camera.position.z += moveZ;
             this.camera.position.x += moveX;
-            this.orbitControl.target.set(-this.model.position.x, this.model.position.y + 1, -this.model.position.z);
+            this.orbitControl.target.set(this.boundingBox.object3D.position.x, this.boundingBox.object3D.position.y + 1, this.boundingBox.object3D.position.z);
+
+            
+
         }
+        
     }
 
 

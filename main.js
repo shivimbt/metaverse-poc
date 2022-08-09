@@ -52,6 +52,7 @@ AFRAME.registerComponent('movement-controller', {
     // Do something when component first attached.
     const camera = document.querySelector('[camera]').getObject3D('camera');
     const orbitControl = document.querySelector('[orbit-controls]').components['orbit-controls'];
+    const modelBoundingBox = document.querySelector('a-entity#character');
     this.el.addEventListener('model-loaded', e => {
       //set model property
       this.model = e.detail.model;
@@ -61,7 +62,7 @@ AFRAME.registerComponent('movement-controller', {
       const animationMap = new Map();
       animations.filter(a => a.name != 'TPose').forEach((a) => animationMap.set(a.name, mixer.clipAction(a)));
       //instantiate character controller
-      this.characterController = new CharacterController(this.model, mixer, animationMap, camera, orbitControl, 'Idle');
+      this.characterController = new CharacterController(this.model, modelBoundingBox, mixer, animationMap, camera, orbitControl, 'Idle');
     })
     this.keysPressed = {}
     document.addEventListener('keydown', event => {
@@ -89,4 +90,15 @@ AFRAME.registerComponent('movement-controller', {
   }
 });
 
+
+AFRAME.registerComponent("autofit-gltf-ammo-sphere", {
+
+  init() {
+    this.el.addEventListener("model-loaded", () => {
+        
+        this.el.setAttribute("ammo-body", "type:dynamic; angularFactor: 0 0 0; emitCollisionEvents: true; activationState: disableDeactivation");
+        this.el.setAttribute("ammo-shape", "type:sphere; fit: manual; offset: 0 1 0; sphereRadius: 1");
+    });
+  }
+});
 
