@@ -2,10 +2,9 @@ import { CharacterController } from "./CharacterController";
 import { KeyDisplay } from "./keydisplay";
 
 
+
 //key display component
 AFRAME.registerComponent('key-display', {
-  schema: {
-  },
 
   init: function () {
     const keyMap = new Map();
@@ -27,26 +26,11 @@ AFRAME.registerComponent('key-display', {
       }
     });
   },
-
-  update: function () {
-    // Do something when component's data is updated.
-  },
-
-  remove: function () {
-    // Do something the component or its entity is detached.
-  },
-
-  tick: function (time, timeDelta) {
-    // Do something on every scene tick or frame.
-  }
 });
 
 
 //movement controller component
 AFRAME.registerComponent('movement-controller', {
-  schema: {
-    
-  },
 
   init: function () {
     // Do something when component first attached.
@@ -74,14 +58,6 @@ AFRAME.registerComponent('movement-controller', {
     document.addEventListener('keyup', event => {
       this.keysPressed[event.key.toLowerCase()] = false;
     }, false);
-  },
-
-  update: function () {
-    // Do something when component's data is updated.
-  },
-
-  remove: function () {
-    // Do something the component or its entity is detached.
   },
 
   tick: function (time, timeDelta) {
@@ -114,16 +90,15 @@ AFRAME.registerComponent('friction-coefficient', {
     });
     
   },
-
-  update: function () {
-    // Do something when component's data is updated.
-  },
-
-  remove: function () {
-    // Do something the component or its entity is detached.
-  },
-
-  tick: function (time, timeDelta) {
-    // Do something on every scene tick or frame.
-  }
 });
+
+document.addEventListener('click', e => {
+  const el = e.target;
+  if(el.classList.contains('avatar-selector')){
+    const avatarId = el.getAttribute('data-src');
+    const avatarEntity = document.querySelector('a-entity#character');
+    avatarEntity.removeAttribute('gltf-model');
+    avatarEntity.setAttribute('gltf-model', avatarId);
+  }
+})
+

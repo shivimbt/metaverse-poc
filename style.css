@@ -45,4 +45,13 @@
     left: 75px;
 }
 
+.selector {
+    position: absolute;
+    top: 0;
+    transform: translate(50%, 50%);
+    background: white;
+    padding: 10px;
+
+}
+
 
