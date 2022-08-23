@@ -4,41 +4,43 @@
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
-    <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
-    <script src="http://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
     <script src="./main.js" type="module"></script>
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <a-scene physics="driver: ammo;" renderer="colorManagement: true;" vr-mode-ui="enabled: false">
+    <a-scene renderer="colorManagement: true;" vr-mode-ui="enabled: false">
+        <!--Asset declaration-->
         <a-assets>
             <a-asset-item id="avatar-female" src="./avatar_female.glb"></a-asset-item>
             <a-asset-item id="avatar-male" src="./avatar.glb"></a-asset-item>
         </a-assets>
+        <!--Camera with orbit controls-->
         <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" orbit-controls="target:0 1 0; minDistance: 5; maxDistance: 15; enablePan: false; initialPosition: 0 3 5" cursor="rayOrigin: mouse">
         </a-entity>
-        <a-entity friction-coefficient="1.3" autofit-gltf-ammo-sphere  shadow key-display movement-controller id="character" rotation="0 180 0">
+        <!--character entity-->
+        <a-entity shadow key-display movement-controller id="character" rotation="0 180 0">
         </a-entity>
-        <a-plane friction-coefficient="0.8"  ammo-body="type: static" ammo-shape="type: box" shadow="receive: true" position="0 0 -4" rotation="-90 0 0" width="40" height="40" color="#7BC8A4"></a-plane>
+        <!--plane-->
+        <a-plane shadow="receive: true" position="0 0 -4" rotation="-90 0 0" width="40" height="40" color="#7BC8A4"></a-plane>
+        <!--sky-->
         <a-sky color="#80d6ff"></a-sky>
-        <a-box  ammo-body="type: dynamic" ammo-shape="type: box"
-        position="0 1 -2" width="1" height="1" depth="1"
-        color="red"></a-box>
-        <a-box ammo-body="type: static" ammo-shape="type: box"
-        position="2 0 0" width="1" height="1" depth="1"
-        color="blue"></a-box>
+        <!--lighting for scene-->
         <a-entity light="type: ambient; color: #FFF; intensity:0.7"></a-entity>
         <a-entity light="type: directional; color: #FFF; intensity: 1; castShadow: true; shadowCameraBottom: -50; shadowCameraFar: 200;	shadowCameraLeft: -50; shadowCameraNear: 0.1; shadowCameraRight: 50; shadowCameraTop: 50; shadowMapHeight: 4096; shadowMapWidth: 4096" position="-60 100 -10"></a-entity>
     </a-scene>
-    <div class="selector">
-        <h1>Choose your avatar</h1>
-        <div>
-            <button class="avatar-selector" data-src="#avatar-female">Alice</button>
-            <button class="avatar-selector" data-src="#avatar-male">Bob</button>
+    <!--Avatar Selector-->
+    <div class="selector-overlay" id="selector-container">
+        <div class="selector">
+            <h1>Choose your avatar</h1>
+            <div>
+                <button class="avatar-selector" data-src="#avatar-female">Alice</button>
+                <button class="avatar-selector" data-src="#avatar-male">Bob</button>
+                <button id="proceed" class="hide">Proceed</button>
+            </div>
         </div>
     </div>
 </body>

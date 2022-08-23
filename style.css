@@ -1,54 +1,26 @@
 *{
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Poppins', sans-serif;
 }
 
-.movement-key {
-    position:absolute;
+/* Avatar Selector */
+
+.selector-overlay {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
     background: rgba(0,0,0,0.5);
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
+    top:0;
 }
 
-.pressed {
-    background: white;
-    color: black;
-}
-
-.key-w, .key-a, .key-d, .key-s {
-    width: 24px;
-    height: 24px;
-    text-align: center;
-}
-
-.key-w {
-    bottom: 180px;
-    left: 300px;
-}
-
-.key-a, .key-s, .key-d, .key-shift {
-    bottom: 100px;
-}
-
-.key-a {
-    left: 200px;
-}
-.key-s {
-    left: 300px;
-}
-
-.key-d {
-    left: 400px;
-}
-
-.key-shift {
-    left: 75px;
+.hide {
+    display: none;
 }
 
 .selector {
     position: absolute;
-    top: 0;
-    transform: translate(50%, 50%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: white;
     padding: 10px;
 

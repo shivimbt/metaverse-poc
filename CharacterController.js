@@ -1,4 +1,5 @@
-import { KeyDisplay } from "./keydisplay";
+const directions = ['w','a','s','d'];
+const shift = 'shift';
 
 export class CharacterController {
     model;
@@ -41,8 +42,8 @@ export class CharacterController {
     }
 
     update(delta, keysPressed) {
-        const directionPressed = KeyDisplay.directions.some(key => keysPressed[key] == true);
-        const isShiftPressed = keysPressed[KeyDisplay.shift];
+        const directionPressed = directions.some(key => keysPressed[key] == true);
+        const isShiftPressed = keysPressed[shift];
         //simple state machine
         var play = '';
         if (directionPressed && isShiftPressed) {
@@ -88,15 +89,11 @@ export class CharacterController {
             // run/walk velocity
             const velocity = this.currentAction == 'Running' ? this.runVelocity : this.walkVelocity;
             // move model & camera
-            const velocityX = this.walkDirection.x * velocity;
-            const velocityY = this.walkDirection.z * velocity; 
-            const moveX = velocityX * delta;
-            const moveZ = velocityY * delta;
-
-            //model movement
-            const velocityForPhysicsBody = new Ammo.btVector3(velocityX, 0, velocityY);
-            this.boundingBox.body.setLinearVelocity(velocityForPhysicsBody);
-            Ammo.destroy(velocityForPhysicsBody);
+            const moveX = this.walkDirection.x * velocity * delta;
+            const moveZ = this.walkDirection.z * velocity * delta; 
+            
+            this.boundingBox.object3D.position.x += moveX;
+            this.boundingBox.object3D.position.z += moveZ;
 
             this.camera.position.z += moveZ;
             this.camera.position.x += moveX;

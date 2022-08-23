@@ -1,32 +1,4 @@
 import { CharacterController } from "./CharacterController";
-import { KeyDisplay } from "./keydisplay";
-
-
-
-//key display component
-AFRAME.registerComponent('key-display', {
-
-  init: function () {
-    const keyMap = new Map();
-    //instantiate display keys
-    KeyDisplay.directions.forEach(keyText => keyMap.set(keyText, new KeyDisplay(keyText)));
-    keyMap.set(KeyDisplay.shift, new KeyDisplay(KeyDisplay.shift));
-
-    //add keyup and keydown handlers
-    document.addEventListener('keydown', event => {
-      const keyPressed = keyMap.get(event.key.toLowerCase());
-      if(keyPressed){
-        keyPressed.down();
-      }
-    });
-    document.addEventListener('keyup', event => {
-      const keyLeft = keyMap.get(event.key.toLowerCase());
-      if(keyLeft){
-        keyLeft.up();
-      }
-    });
-  },
-});
 
 
 //movement controller component
@@ -67,31 +39,7 @@ AFRAME.registerComponent('movement-controller', {
 });
 
 
-AFRAME.registerComponent("autofit-gltf-ammo-sphere", {
-
-  init() {
-    this.el.addEventListener("model-loaded", () => {
-        
-        this.el.setAttribute("ammo-body", "type:dynamic; angularFactor: 0 0 0; emitCollisionEvents: true; activationState: disableDeactivation");
-        this.el.setAttribute("ammo-shape", "type:sphere; fit: manual; offset: 0 1 0; sphereRadius: 1");
-    });
-  }
-});
-
-AFRAME.registerComponent('friction-coefficient', {
-  schema: {
-    default: 0.8
-  },
-
-  init: function () {
-    // Do something when component first attached.
-    this.el.addEventListener("body-loaded", () => {
-      this.el.body.setFriction(this.data);
-    });
-    
-  },
-});
-
+//click listener
 document.addEventListener('click', e => {
   const el = e.target;
   if(el.classList.contains('avatar-selector')){
@@ -99,6 +47,13 @@ document.addEventListener('click', e => {
     const avatarEntity = document.querySelector('a-entity#character');
     avatarEntity.removeAttribute('gltf-model');
     avatarEntity.setAttribute('gltf-model', avatarId);
+    //enable the proceed button
+    document.getElementById('proceed').classList.remove('hide');
   }
+});
+
+//proceed button click listener
+document.getElementById('proceed').addEventListener('click', e=> {
+  document.getElementById('selector-container').classList.add('hide');
 })
 
