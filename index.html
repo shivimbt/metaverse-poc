@@ -12,14 +12,18 @@
 </head>
 
 <body>
-    <a-scene renderer="colorManagement: true;" vr-mode-ui="enabled: false">
+    <a-scene renderer="colorManagement: true;" vr-mode-ui="enabled: false" cursor='rayOrigin: mouse;'>
         <!--Asset declaration-->
         <a-assets>
             <a-asset-item id="avatar-female" src="./avatar_female.glb"></a-asset-item>
             <a-asset-item id="avatar-male" src="./avatar.glb"></a-asset-item>
+            <!-- Scenes -->
+            <a-asset-item id="reception" src="./models/reception/reception.gltf"></a-asset-item>
+            <a-asset-item id="bedroom" src="./models/60s_room/bedroom.gltf"></a-asset-item>
+            <a-asset-item id="partyHall" src="./models/premier_palace_kiev/partyhall.gltf"></a-asset-item>
         </a-assets>
         <!--Camera with orbit controls-->
-        <a-entity id="camera" camera="fov: 45; near: 0.1; far: 1000" orbit-controls="target:0 1 0; minDistance: 5; maxDistance: 15; enablePan: false; initialPosition: 0 3 5" cursor="rayOrigin: mouse">
+        <a-entity id="camera" camera="fov: 65; near: 0.1; far: 1000" orbit-controls="target:0 1 0; minDistance: 5; maxDistance: 15; enablePan: false; initialPosition: 0 3 5" cursor="rayOrigin: mouse">
         </a-entity>
         <!--character entity-->
         <a-entity shadow key-display movement-controller id="character" rotation="0 180 0">
@@ -31,6 +35,42 @@
         <!--lighting for scene-->
         <a-entity light="type: ambient; color: #FFF; intensity:0.7"></a-entity>
         <a-entity light="type: directional; color: #FFF; intensity: 1; castShadow: true; shadowCameraBottom: -50; shadowCameraFar: 200;	shadowCameraLeft: -50; shadowCameraNear: 0.1; shadowCameraRight: 50; shadowCameraTop: 50; shadowMapHeight: 4096; shadowMapWidth: 4096" position="-60 100 -10"></a-entity>
+        <!-- Scene model -->
+        <a-entity id="modalContainer" gltf-model="#bedroom" rotation="0 0 0" position="0.379 3 1" scale="1 1 1">
+        <!-- <a-entity id="modalContainer" gltf-model="#reception" rotation="0 -90 0" position="-6.138 0 0" scale="2 2 2"> -->
+            <!-- Room 2:1 Panel | Parent Entity --> 
+            <a-box color="#689F38"
+            class="clickable"
+            width="2"
+            height="1.5"
+            depth="0.2"
+            position="-0.90376 0.20803 -2.44242" 
+            rotation="0 90 0" 
+            scale="0.1 0.1 0.1"
+            model-changer="target: #modalContainer"
+            data-src="#bedroom"
+            data-position="0.379 3 1"
+            data-scale="1 1 1"
+            >
+                <!-- Circle | Child Entity -->
+                <a-circle color="#689F38"
+                        side="double"
+                        position="1 0 0.11"
+                        rotation="0 0 0"
+                        radius="0.75"
+                        >
+                </a-circle>
+                <a-circle color="#689F38"
+                side="double"
+                position="-1 0 0.11"
+                rotation="0 0 0"
+                radius="0.75"
+                >
+                </a-circle>
+            </a-box>
+            
+        </a-entity>
+        <!-- Buttons  -->
     </a-scene>
     <!--Avatar Selector-->
     <div class="selector-overlay" id="selector-container">
