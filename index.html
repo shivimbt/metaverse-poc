@@ -15,8 +15,8 @@
     <a-scene renderer="colorManagement: true;" vr-mode-ui="enabled: false" cursor='rayOrigin: mouse;'>
         <!--Asset declaration-->
         <a-assets>
-            <a-asset-item id="avatar-female" src="./avatar_female.glb"></a-asset-item>
-            <a-asset-item id="avatar-male" src="./avatar.glb"></a-asset-item>
+            <a-asset-item id="avatar-female" src="./models/avatar_female.glb"></a-asset-item>
+            <a-asset-item id="avatar-male" src="./models/avatar.glb"></a-asset-item>
             <!-- Scenes -->
             <a-asset-item id="reception" src="./models/reception/reception.gltf"></a-asset-item>
             <a-asset-item id="bedroom" src="./models/60s_room/bedroom.gltf"></a-asset-item>
@@ -36,8 +36,8 @@
         <a-entity light="type: ambient; color: #FFF; intensity:0.7"></a-entity>
         <a-entity light="type: directional; color: #FFF; intensity: 1; castShadow: true; shadowCameraBottom: -50; shadowCameraFar: 200;	shadowCameraLeft: -50; shadowCameraNear: 0.1; shadowCameraRight: 50; shadowCameraTop: 50; shadowMapHeight: 4096; shadowMapWidth: 4096" position="-60 100 -10"></a-entity>
         <!-- Scene model -->
-        <a-entity id="modalContainer" gltf-model="#bedroom" rotation="0 0 0" position="0.379 3 1" scale="1 1 1">
-        <!-- <a-entity id="modalContainer" gltf-model="#reception" rotation="0 -90 0" position="-6.138 0 0" scale="2 2 2"> -->
+        <!-- <a-entity id="modalContainer" gltf-model="#reception" rotation="0 0 0" position="0.379 3 1" scale="1 1 1"> -->
+        <a-entity id="modalContainer" gltf-model="#reception" rotation="0 -90 0" position="-6.138 0 0" scale="2 2 2">
             <!-- Room 2:1 Panel | Parent Entity --> 
             <a-box color="#689F38"
             class="clickable"
@@ -48,7 +48,7 @@
             rotation="0 90 0" 
             scale="0.1 0.1 0.1"
             model-changer="target: #modalContainer"
-            data-src="#bedroom"
+            data-src="./models/60s_room/bedroom.gltf"
             data-position="0.379 3 1"
             data-scale="1 1 1"
             >
