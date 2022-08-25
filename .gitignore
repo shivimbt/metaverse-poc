@@ -25,4 +25,5 @@ dist-ssr
 
 #blender files
 *.blend
-*.glb
+avatar.glb
+avatar_female.glb
