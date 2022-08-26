@@ -57,3 +57,37 @@ document.getElementById('proceed').addEventListener('click', e=> {
   document.getElementById('selector-container').classList.add('hide');
 })
 
+/* 
+  This function is used for change 3d model scenes
+*/
+
+AFRAME.registerComponent ('model-changer', {
+	schema: {
+		target: {type: 'selector', default: ''}
+	},
+	
+	init: function () {
+		var el = this.el;
+		var data = this.data;
+		// let box = document.querySelector('.backBtn')
+		// console.log('this.data', this.data)
+		function getAssetSrc(attributeName = 'data-src') {
+			console.log('el', el);
+			console.log(attributeName, el.getAttribute(attributeName))
+            return el.getAttribute(attributeName) || null;
+          }
+
+		el.addEventListener('click', function () {
+			// console.log('el', el);
+			// box.setAttribute('visible', 'true');
+			if (data.target) {
+				// data.target.setAttribute('material', 'color', randomHEX);
+				console.log('test', getAssetSrc())
+				data.target.setAttribute('gltf-model', getAssetSrc('data-src'));
+				data.target.setAttribute('position', getAssetSrc('data-position'));
+				// data.target.setAttribute('rotation', getAssetSrc('data-rotation'));
+				// data.target.setAttribute('scale', getAssetSrc('data-scale'));
+			} 		
+		});
+	}
+});
