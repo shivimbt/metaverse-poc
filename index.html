@@ -9,6 +9,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function showModal()
+{
+  $('#modal').show();
+}
+
+function hideModal()
+{
+  $('#modal').hide();
+}
+    </script>
 </head>
 
 <body>
@@ -82,6 +95,15 @@
                 <button id="proceed" class="hide">Proceed</button>
             </div>
         </div>
+    </div>
+
+    <div id="modal">
+        <div class="close" onClick="hideModal()">&times;</div>
+        <iframe name="modal_iframe" src="booking.html"></iframe>
+    </div>
+
+    <div style="position: absolute; top:1px">
+        <button onClick="showModal()">Stack Overflow</button>
     </div>
 </body>
 </html>
